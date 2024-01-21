@@ -10,3 +10,5 @@ _fresh/
 
 .vscode
 
+node_modules/
+
