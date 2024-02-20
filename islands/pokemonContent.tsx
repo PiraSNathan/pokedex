@@ -10,6 +10,7 @@ import {
   IPokemonStat,
 } from "npm:pokeapi-typescript";
 import BarChart from "../components/BarChart.tsx";
+import Tag from "../components/Tag.tsx";
 
 interface Props {
   index: number | string;
@@ -127,10 +128,7 @@ export default function PokemonContent(props: Props) {
                     (type: any, i: number) => {
                       return (
                         <div className="capitalize mr-1">
-                          {type.type.name}
-                          {i === props.pokemonInformation.types.length - 1
-                            ? ""
-                            : ","}
+                          <Tag name={type.type.name} />
                         </div>
                       );
                     },
