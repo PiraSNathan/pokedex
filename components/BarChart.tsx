@@ -3,7 +3,7 @@ interface Props {
   colour?: string;
 }
 
-const BarChar = (props: Props) => {
+const BarChart = (props: Props) => {
   return (
     <div className="h-4 border-[#6f6d708f] border border-1 rounded-md w-[200px]">
       <div
@@ -18,4 +18,4 @@ const BarChar = (props: Props) => {
   );
 };
 
-export default BarChar;
+export default BarChart;
