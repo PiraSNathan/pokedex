@@ -8,6 +8,7 @@ import * as $api_joke from "./routes/api/joke.ts";
 import * as $index from "./routes/index.tsx";
 import * as $pokemons_id_ from "./routes/pokemons/[id].tsx";
 import * as $pokemons_index from "./routes/pokemons/index.tsx";
+import * as $pokemons from "./islands/pokemons.tsx";
 import * as $pokemonContent from "./islands/pokemonContent.tsx";
 import * as $search from "./islands/search.tsx";
 import { type Manifest } from "$fresh/server.ts";
@@ -22,6 +23,7 @@ const manifest = {
     "./routes/pokemons/index.tsx": $pokemons_index,
   },
   islands: {
+    "./islands/pokemons.tsx": $pokemons,
     "./islands/pokemonContent.tsx": $pokemonContent,
     "./islands/search.tsx": $search,
   },
