@@ -1,4 +1,5 @@
 import { useEffect, useState } from "preact/hooks";
+import { getPokemonIndex } from "../util/index.tsx";
 
 interface PokemonData {
   name: string;
@@ -15,10 +16,6 @@ export default function Pokemons(props: Props) {
   const [filterOption, setFilterOption] = useState<string>(
     "none",
   );
-
-  function getPokemonImage(name: string): string {
-    return `https://img.pokemondb.net/sprites/home/normal/1x/${name}.png`;
-  }
 
   useEffect(() => {
     if (filterOption === "none") {
@@ -42,13 +39,9 @@ export default function Pokemons(props: Props) {
     })();
   }, [filterOption]);
 
-  const getIndexNumber = (url: string) => {
-    const number = url.split("/");
-    return number[6].toString().padStart(3, "0");
-  };
-  const getIndexNumberPokemon = (url: string) => {
-    const number = url.split("/");
-    return number[6].toString();
+  const getFormattedIndexNumber = (url: string) => {
+    const pokemonIndex = getPokemonIndex(url);
+    return pokemonIndex.padStart(3, "0");
   };
 
   const dropdownFilter = (
@@ -116,11 +109,11 @@ export default function Pokemons(props: Props) {
           return (
             <li className="bg-gray-200 flex items-center justify-around p-1 rounded-sm">
               <a
-                href={`/pokemons/${getIndexNumberPokemon(pokemon.url)}`}
+                href={`/pokemons/${getPokemonIndex(pokemon.url)}`}
                 class="flex flex-col px-2"
               >
                 <span class="self-end">
-                  #{getIndexNumber(pokemon.url)}
+                  #{getFormattedIndexNumber(pokemon.url)}
                 </span>
                 <div className={"w-30 h-30 flex items-center justify-around"}>
                   <div
@@ -134,7 +127,7 @@ export default function Pokemons(props: Props) {
                         <img
                           class="w-28 h-28 mx-auto"
                           src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                            getIndexNumberPokemon(pokemon.url)
+                            getPokemonIndex(pokemon.url)
                           }.png`}
                           alt={pokemon.name}
                         />

@@ -5,6 +5,7 @@ import {
   IPokemon,
   IPokemonSpecies,
 } from "npm:pokeapi-typescript";
+import { getPokemonIndex } from "../../util/index.tsx";
 
 interface PokemonDetails {
   id: number;
@@ -47,13 +48,14 @@ const getEvolutionChain = async (url: string) => {
   const evolutionChain: IEvolutionChain = await res.json();
   if (evolutionChain.chain.evolves_to.length === 0) return [];
   let current = evolutionChain.chain.evolves_to;
-  evolutionChainPokemons.push(evolutionChain.chain.species.name);
+  evolutionChainPokemons.push(
+    getPokemonIndex(evolutionChain.chain.species.url),
+  );
   while (current !== null) {
     if (current[0] === undefined) return evolutionChainPokemons;
-    evolutionChainPokemons.push(current[0].species.name);
+    evolutionChainPokemons.push(getPokemonIndex(current[0].species.url));
     current = current[0].evolves_to;
   }
-  console.log(evolutionChainPokemons);
 };
 
 export default function Pokemons(props: PageProps) {
