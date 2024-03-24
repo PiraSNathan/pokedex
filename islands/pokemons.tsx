@@ -1,12 +1,15 @@
-import { IS_BROWSER } from "$fresh/runtime.ts";
-import { h, JSX } from "preact";
 import { useEffect, useState } from "preact/hooks";
 
 interface PokemonData {
   name: string;
   url: string;
 }
-export default function Pokemons() {
+
+interface Props {
+  pokemons: PokemonData[];
+}
+
+export default function Pokemons(props: Props) {
   const [pokemons, setPokemons] = useState<PokemonData[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filterOption, setFilterOption] = useState<string>(
@@ -18,18 +21,11 @@ export default function Pokemons() {
   }
 
   useEffect(() => {
-    if (filterOption !== "none") return;
-    (async () => {
-      const res = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/?limit=1000`,
-      );
-      const resBody = await res.json();
-      setPokemons(resBody.results);
-    })();
-  }, [filterOption]);
-
-  useEffect(() => {
-    if (filterOption === "none") return;
+    if (filterOption === "none") {
+      if (JSON.stringify(pokemons) === JSON.stringify(props.pokemons)) return;
+      setPokemons(props.pokemons);
+      return;
+    }
     (async () => {
       const res = await fetch(
         `https://pokeapi.co/api/v2/type/${filterOption.toLowerCase()}`,
@@ -55,6 +51,48 @@ export default function Pokemons() {
     return number[6].toString();
   };
 
+  const dropdownFilter = (
+    <div class="relative inline-flex">
+      <svg
+        class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 412 232"
+      >
+        <path
+          d="M406.8 0L0 0 206 231.6 412 0 406.8 0z"
+          fill="currentColor"
+        />
+      </svg>
+      <select
+        class="border border-gray-300 rounded text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none" // ...
+        onClick={(e: any) => {
+          const value = e.target?.value;
+          setFilterOption(value);
+        }}
+      >
+        <option value="none">Filter by type</option>
+        <option>Fire</option>
+        <option>Water</option>
+        <option>Grass</option>
+        <option>Poison</option>
+        <option>Bug</option>
+        <option>Normal</option>
+        <option>Flying</option>
+        <option>Electric</option>
+        <option>Ground</option>
+        <option>Fairy</option>
+        <option>Fighting</option>
+        <option>Psychic</option>
+        <option>Rock</option>
+        <option>Steel</option>
+        <option>Ice</option>
+        <option>Ghost</option>
+        <option>Dragon</option>
+        <option>Dark</option>
+      </select>
+    </div>
+  );
+
   if (pokemons.length === 0) return <div>Loading...</div>;
   return (
     <div className="p-8 space-y-4">
@@ -68,45 +106,7 @@ export default function Pokemons() {
           onInput={(e: any) => setSearchQuery(e.target?.value)}
         />
         {/* Dropdown filter */}
-        <div class="relative inline-flex">
-          <svg
-            class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 412 232"
-          >
-            <path
-              d="M406.8 0L0 0 206 231.6 412 0 406.8 0z"
-              fill="currentColor"
-            />
-          </svg>
-          <select
-            class="border border-gray-300 rounded text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none" // ...
-            onClick={(e: any) => {
-              const value = e.target?.value;
-              setFilterOption(value);
-            }}
-          >
-            <option value="none">Filter by type</option>
-            <option>Fire</option>
-            <option>Water</option>
-            <option>Grass</option>
-            <option>Poison</option>
-            <option>Bug</option>
-            <option>Normal</option>
-            <option>Flying</option>
-            <option>Electric</option>
-            <option>Ground</option>
-            <option>Fairy</option>
-            <option>Fighting</option>
-            <option>Psychic</option>
-            <option>Rock</option>
-            <option>Steel</option>
-            <option>Ice</option>
-            <option>Ghost</option>
-            <option>Dragon</option>
-            <option>Dark</option>
-          </select>
-        </div>
+        {dropdownFilter}
       </div>
       <ul class="grid grid-cols-3 gap-2 sm:grid-cols-5 md:w-[900px] m-auto">
         {pokemons.filter((pokemon, index) => {
@@ -116,7 +116,7 @@ export default function Pokemons() {
           return (
             <li className="bg-gray-200 flex items-center justify-around p-1 rounded-sm">
               <a
-                href={`/pokemons/${index + 1}`}
+                href={`/pokemons/${getIndexNumberPokemon(pokemon.url)}`}
                 class="flex flex-col px-2"
               >
                 <span class="self-end">
