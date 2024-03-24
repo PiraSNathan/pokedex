@@ -1,8 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
-import { h } from "preact";
 import { Button } from "../components/Button.tsx";
 import { FastAverageColor } from "npm:fast-average-color";
-import { darken, lighten } from "npm:polished";
+import { lighten } from "npm:polished";
 import {
   IPokemon,
   IPokemonSpecies,
@@ -33,9 +32,7 @@ export default function PokemonContent(props: Props) {
     const pokemonTileBig = document.querySelector(
       "#pokemon-tile-big",
     ) as HTMLDivElement;
-    // const evolutionTile = document.querySelector(
-    //   "#evolution-tile",
-    // ) as HTMLDivElement;
+
     const divs = document.querySelectorAll(".evolution-tile") as NodeListOf<
       HTMLDivElement
     >;
@@ -43,14 +40,9 @@ export default function PokemonContent(props: Props) {
     if (container === null || pokemonTile === null) return;
     fac.getColorAsync(container)
       .then((color) => {
-        console.log(color.rgba);
-        // console.log(darken(1, color.rgba));
-
         const light = lighten(0.1, color.rgb);
         const lighterColor = lighten(0.175, color.rgb);
-        console.log(light);
         setLightColor(lighten(0.175, color.rgb));
-        console.log(lightColor);
         pokemonTile.style.background = color.rgba;
         pokemonTileBig.style.background = color.rgba;
         pokemonTile.style.background =
@@ -69,12 +61,12 @@ export default function PokemonContent(props: Props) {
   }, [indexNumber]);
 
   const handleClick = (value: number) => {
-    const tmp = Number(props.index) + value;
-    setPokeIndex(tmp);
-    window.location.href = `/pokemons/${tmp}`;
+    const pokemonIndex = Number(props.index) + value;
+    setPokeIndex(pokemonIndex);
+    window.location.href = `/pokemons/${pokemonIndex}`;
   };
 
-  const handleClickOnIndex = (value: number) => {
+  const handleClickOnTab = (value: number) => {
     setIndexNumber(value);
   };
 
@@ -106,16 +98,14 @@ export default function PokemonContent(props: Props) {
             <img
               crossOrigin="anonymous"
               class="w-52 h-52 mx-auto mb-16"
-              // src={`https://img.pokemondb.net/sprites/home/normal/1x/${props.data.pokemonSpecies.name}.png`}
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
               alt="the Fresh logo: a sliced lemon dripping with juice"
             />
             <div
               className={`flex absolute bottom-0 flex-row justify-center text-2xl font-sans space-x-1 text-black`}
             >
-              {/* 0 0px 20px -2px rgb(0 0 0 / 1) */}
               <button
-                onClick={() => handleClickOnIndex(0)}
+                onClick={() => handleClickOnTab(0)}
                 className={`${
                   indexNumber === 0 && "z-10 !bg-white"
                 } bg-gray-200 p-2 rounded-tl-lg rounded-tr-lg`}
@@ -123,7 +113,7 @@ export default function PokemonContent(props: Props) {
                 General
               </button>
               <button
-                onClick={() => handleClickOnIndex(1)}
+                onClick={() => handleClickOnTab(1)}
                 className={`${
                   indexNumber === 1 && "z-10 !bg-white"
                 } bg-gray-200 p-2 rounded-tl-lg rounded-tr-lg `}
@@ -195,18 +185,19 @@ export default function PokemonContent(props: Props) {
                     <div className={"flex justify-between"}>
                       {props.pokeEvolutions &&
                         props.pokeEvolutions.map(
-                          (ev: string, index: number) => {
+                          (evolvesToPokemonIndex: string) => {
                             return (
-                              <div
-                                className={`evolution-tile p-2 rounded-full`}
-                              >
-                                <img
-                                  class="w-24 h-24 mx-auto"
-                                  // src={`https://img.pokemondb.net/sprites/home/normal/1x/${ev}.png`}
-                                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${ev}.png`}
-                                  alt="the Fresh logo: a sliced lemon dripping with juice"
-                                />
-                              </div>
+                              <a href={`/pokemons/${evolvesToPokemonIndex}`}>
+                                <div
+                                  className={`evolution-tile p-2 rounded-full`}
+                                >
+                                  <img
+                                    class="w-24 h-24 mx-auto"
+                                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolvesToPokemonIndex}.png`}
+                                    alt="the Fresh logo: a sliced lemon dripping with juice"
+                                  />
+                                </div>
+                              </a>
                             );
                           },
                         )}
@@ -284,7 +275,6 @@ export default function PokemonContent(props: Props) {
             <img
               crossOrigin="anonymous"
               class="w-52 h-52 mx-auto"
-              // src={`https://img.pokemondb.net/sprites/home/normal/1x/${props.data.pokemonSpecies.name}.png`}
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
               alt="the Fresh logo: a sliced lemon dripping with juice"
             />
@@ -334,7 +324,6 @@ export default function PokemonContent(props: Props) {
               >
                 {props.pokemonName}
               </h2>
-              {/* <div className={"divide-y h-0.5 bg-gray-400 w-full m-auto"} /> */}
               <p className="py-4 m-auto text-center">
                 <p className={"text-md"}>
                   {convertToProperSentence(
@@ -376,15 +365,15 @@ export default function PokemonContent(props: Props) {
                   <div className={"flex space-x-4 w-full"}>
                     {props.pokeEvolutions &&
                       props.pokeEvolutions.map(
-                        (ev: string, index: number) => {
+                        (evolvesToPokemonIndex: string) => {
                           return (
-                            <a href={`/pokemons/${ev}`}>
+                            <a href={`/pokemons/${evolvesToPokemonIndex}`}>
                               <div
                                 className={`evolution-tile p-2 rounded-full`}
                               >
                                 <img
                                   class="w-20 h-20 mx-auto"
-                                  src={`https://img.pokemondb.net/sprites/home/normal/1x/${ev}.png`}
+                                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolvesToPokemonIndex}.png`}
                                   alt="the Fresh logo: a sliced lemon dripping with juice"
                                 />
                               </div>
