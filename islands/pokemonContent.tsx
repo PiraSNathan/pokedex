@@ -4,7 +4,6 @@ import { Button } from "../components/Button.tsx";
 import { FastAverageColor } from "npm:fast-average-color";
 import { darken, lighten } from "npm:polished";
 import {
-  IEvolutionChain,
   IPokemon,
   IPokemonSpecies,
   IPokemonStat,
@@ -31,6 +30,9 @@ export default function PokemonContent(props: Props) {
     const pokemonTile = document.querySelector(
       "#pokemon-tile",
     ) as HTMLDivElement;
+    const pokemonTileBig = document.querySelector(
+      "#pokemon-tile-big",
+    ) as HTMLDivElement;
     // const evolutionTile = document.querySelector(
     //   "#evolution-tile",
     // ) as HTMLDivElement;
@@ -50,7 +52,10 @@ export default function PokemonContent(props: Props) {
         setLightColor(lighten(0.175, color.rgb));
         console.log(lightColor);
         pokemonTile.style.background = color.rgba;
+        pokemonTileBig.style.background = color.rgba;
         pokemonTile.style.background =
+          `linear-gradient(180deg, ${color.rgba} 0%, ${light} 100%)`;
+        pokemonTileBig.style.background =
           `linear-gradient(180deg, ${color.rgba} 0%, ${light} 100%)`;
         divs.forEach((evolutionTile) => {
           evolutionTile.style.background = lightColor;
@@ -84,182 +89,347 @@ export default function PokemonContent(props: Props) {
 
   return (
     <>
-      <div>
-        {/* pokemon index */}
-        <div
-          className={"flex flex-col mt-3 mb-4 font-semibold text-2xl items-center"}
-        >
-          {props.index}
-        </div>
-        <div
-          id="pokemon-tile"
-          className={"flex font-pokemonNameB capitalize font-semibold relative flex-col items-center text-[#545454] mx-5 pt-8 rounded-tl-3xl rounded-tr-3xl text-4xl"}
-        >
-          {props.pokemonName}
-          <img
-            crossOrigin="anonymous"
-            class="w-52 h-52 mx-auto mb-16"
-            // src={`https://img.pokemondb.net/sprites/home/normal/1x/${props.data.pokemonSpecies.name}.png`}
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
-            alt="the Fresh logo: a sliced lemon dripping with juice"
-          />
+      {/* Mobile View */}
+      <div className={"md:hidden"}>
+        <div>
+          {/* pokemon index */}
           <div
-            className={`flex absolute bottom-0 flex-row justify-center text-2xl font-sans space-x-1 text-black`}
+            className={"flex flex-col mt-3 mb-4 font-semibold text-2xl items-center"}
           >
-            {/* 0 0px 20px -2px rgb(0 0 0 / 1) */}
-            <button
-              onClick={() => handleClickOnIndex(0)}
-              className={`${
-                indexNumber === 0 && "z-10 !bg-white"
-              } bg-gray-200 p-2 rounded-tl-lg rounded-tr-lg`}
+            {props.index}
+          </div>
+          <div
+            id="pokemon-tile"
+            className={"flex font-pokemonNameB capitalize font-semibold relative flex-col items-center text-[#545454] mx-5 pt-8 rounded-tl-3xl rounded-tr-3xl text-4xl"}
+          >
+            {props.pokemonName}
+            <img
+              crossOrigin="anonymous"
+              class="w-52 h-52 mx-auto mb-16"
+              // src={`https://img.pokemondb.net/sprites/home/normal/1x/${props.data.pokemonSpecies.name}.png`}
+              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
+              alt="the Fresh logo: a sliced lemon dripping with juice"
+            />
+            <div
+              className={`flex absolute bottom-0 flex-row justify-center text-2xl font-sans space-x-1 text-black`}
             >
-              General
-            </button>
-            <button
-              onClick={() => handleClickOnIndex(1)}
-              className={`${
-                indexNumber === 1 && "z-10 !bg-white"
-              } bg-gray-200 p-2 rounded-tl-lg rounded-tr-lg `}
-            >
-              Moves & Abilities
-            </button>
+              {/* 0 0px 20px -2px rgb(0 0 0 / 1) */}
+              <button
+                onClick={() => handleClickOnIndex(0)}
+                className={`${
+                  indexNumber === 0 && "z-10 !bg-white"
+                } bg-gray-200 p-2 rounded-tl-lg rounded-tr-lg`}
+              >
+                General
+              </button>
+              <button
+                onClick={() => handleClickOnIndex(1)}
+                className={`${
+                  indexNumber === 1 && "z-10 !bg-white"
+                } bg-gray-200 p-2 rounded-tl-lg rounded-tr-lg `}
+              >
+                Moves & Abilities
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      <div className={`grow h-full mx-5 relative mt-4`}>
-        <div className={`w-full h-full`}>
-          {indexNumber === 0 && (
-            <div>
-              {/* General information */}
-              <div className={"flex flex-col space-y-4"}>
-                <div className="py-4 flex flex-row flex-wrap m-auto">
-                  {props.pokemonInformation.types.map(
-                    (type: any, i: number) => {
-                      return (
-                        <div className="capitalize mr-1">
-                          <Tag name={type.type.name} />
-                        </div>
-                      );
-                    },
-                  )}
-                </div>
-                <div className={"divide-y h-0.5 bg-gray-400 w-full m-auto"} />
-                <p className="py-4 m-auto text-center">
-                  <p className={"text-xl"}>
-                    {convertToProperSentence(
-                      props.pokemonSpecies.flavor_text_entries.find((entry) =>
-                        entry.language.name === "en"
-                      )?.flavor_text,
-                    )}
-                  </p>
-                </p>
-                <div className={"divide-y h-0.5 bg-gray-400 w-full m-auto"} />
-                <div className={"flex"}>
-                  <p className="py-4 flex items-center space-x-2 m-auto">
-                    <span
-                      className="material-symbols-outlined"
-                      style={{ "fontSize": "52px" }}
-                    >
-                      weight
-                    </span>
-                    <span className={"text-xl"}>
-                      {props.pokemonInformation.weight / 10} kg
-                    </span>
-                  </p>
-                  <p className="py-4 flex items-center space-x-2 m-auto">
-                    <span
-                      class="material-symbols-outlined"
-                      style={{ "fontSize": "52px" }}
-                    >
-                      height
-                    </span>
-                    <span className={"text-xl"}>
-                      {props.pokemonInformation.height / 10} m
-                    </span>
-                  </p>
-                </div>
-              </div>
-              {/* Evolution Chain */}
-
-              {props.pokeEvolutions?.length !== 0 && (
-                <div>
-                  <h2 className="font-semibold text-3xl mb-4 mt-2">
-                    Evolution
-                  </h2>
-                  <div className={"flex justify-between"}>
-                    {props.pokeEvolutions &&
-                      props.pokeEvolutions.map((ev: string, index: number) => {
+        <div className={`grow h-full mx-5 relative mt-4`}>
+          <div className={`w-full h-full`}>
+            {indexNumber === 0 && (
+              <div>
+                {/* General information */}
+                <div className={"flex flex-col space-y-4"}>
+                  <div className="py-4 flex flex-row flex-wrap m-auto">
+                    {props.pokemonInformation.types.map(
+                      (type: any, i: number) => {
                         return (
-                          <div
-                            className={`evolution-tile p-2 rounded-full`}
-                          >
-                            <img
-                              class="w-24 h-24 mx-auto"
-                              src={`https://img.pokemondb.net/sprites/home/normal/1x/${ev}.png`}
-                              alt="the Fresh logo: a sliced lemon dripping with juice"
-                            />
+                          <div className="capitalize mr-1">
+                            <Tag name={type.type.name} />
                           </div>
                         );
-                      })}
+                      },
+                    )}
+                  </div>
+                  <div className={"divide-y h-0.5 bg-gray-400 w-full m-auto"} />
+                  <p className="py-4 m-auto text-center">
+                    <p className={"text-xl"}>
+                      {convertToProperSentence(
+                        props.pokemonSpecies.flavor_text_entries.find((entry) =>
+                          entry.language.name === "en"
+                        )?.flavor_text,
+                      )}
+                    </p>
+                  </p>
+                  <div className={"divide-y h-0.5 bg-gray-400 w-full m-auto"} />
+                  <div className={"flex"}>
+                    <p className="py-4 flex items-center space-x-2 m-auto">
+                      <span
+                        className="material-symbols-outlined"
+                        style={{ "fontSize": "52px" }}
+                      >
+                        weight
+                      </span>
+                      <span className={"text-xl"}>
+                        {props.pokemonInformation.weight / 10} kg
+                      </span>
+                    </p>
+                    <p className="py-4 flex items-center space-x-2 m-auto">
+                      <span
+                        class="material-symbols-outlined"
+                        style={{ "fontSize": "52px" }}
+                      >
+                        height
+                      </span>
+                      <span className={"text-xl"}>
+                        {props.pokemonInformation.height / 10} m
+                      </span>
+                    </p>
                   </div>
                 </div>
-              )}
-            </div>
-          )}
-          {indexNumber === 1 && (
-            <>
-              {props.pokemonInformation.stats.map((stat: IPokemonStat) => {
-                return (
-                  <div
-                    className={"flex flex-row items-center justify-between p-3"}
-                  >
-                    <p className={"capitalize"}>{stat.stat.name}</p>
-                    <div className={"flex flex-row items-center space-x-2"}>
-                      <BarChart
-                        value={stat.base_stat}
-                        colour={`${lightColor}`}
-                      />
-                      <p className={"w-7 text-right"}>{stat.base_stat}</p>
+                {/* Evolution Chain */}
+                {props.pokeEvolutions?.length !== 0 && (
+                  <div>
+                    <h2 className="font-semibold text-3xl mb-4 mt-2">
+                      Evolution
+                    </h2>
+                    <div className={"flex justify-between"}>
+                      {props.pokeEvolutions &&
+                        props.pokeEvolutions.map(
+                          (ev: string, index: number) => {
+                            return (
+                              <div
+                                className={`evolution-tile p-2 rounded-full`}
+                              >
+                                <img
+                                  class="w-24 h-24 mx-auto"
+                                  // src={`https://img.pokemondb.net/sprites/home/normal/1x/${ev}.png`}
+                                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${ev}.png`}
+                                  alt="the Fresh logo: a sliced lemon dripping with juice"
+                                />
+                              </div>
+                            );
+                          },
+                        )}
                     </div>
                   </div>
-                );
-              })}
-            </>
-          )}
-        </div>
-        {/* Navigationbuttons */}
-        <div
-          className={"w-full flex justify-start absolute bottom-0 py-4 space-x-4"}
-        >
-          {pokeIndex !== 1 && (
-            <Button
-              id="btn"
-              onClick={() => handleClick(-1)}
-              className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
-            >
-              <span
-                className="material-icons-outlined w-12 h-12"
-                style={{ fontSize: "48px" }}
-              >
-                chevron_left
-              </span>
-            </Button>
-          )}
-
-          {pokeIndex !== 1100 &&
-            (
+                )}
+              </div>
+            )}
+            {indexNumber === 1 && (
+              <>
+                {props.pokemonInformation.stats.map((stat: IPokemonStat) => {
+                  return (
+                    <div
+                      className={"flex flex-row items-center justify-between p-3"}
+                    >
+                      <p className={"capitalize"}>{stat.stat.name}</p>
+                      <div className={"flex flex-row items-center space-x-2"}>
+                        <BarChart
+                          value={stat.base_stat}
+                          colour={`${lightColor}`}
+                        />
+                        <p className={"w-7 text-right"}>{stat.base_stat}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            )}
+          </div>
+          {/* Navigationbuttons */}
+          <div
+            className={"w-full flex justify-start absolute bottom-0 py-4 space-x-4"}
+          >
+            {pokeIndex !== 1 && (
               <Button
-                onClick={() => handleClick(1)}
+                id="btn"
+                onClick={() => handleClick(-1)}
                 className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
               >
                 <span
                   className="material-icons-outlined w-12 h-12"
                   style={{ fontSize: "48px" }}
                 >
-                  chevron_right
+                  chevron_left
                 </span>
               </Button>
             )}
+
+            {pokeIndex !== 1100 &&
+              (
+                <Button
+                  onClick={() => handleClick(1)}
+                  className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
+                >
+                  <span
+                    className="material-icons-outlined w-12 h-12"
+                    style={{ fontSize: "48px" }}
+                  >
+                    chevron_right
+                  </span>
+                </Button>
+              )}
+          </div>
+        </div>
+      </div>
+      {/* Desktop View */}
+      <div className="hidden md:block w-[900px] m-auto">
+        <div className={"flex flex-row"}>
+          {/* Left side */}
+          <div
+            id="pokemon-tile-big"
+            className={"flex capitalize font-semibold flex-col items-center text-[#545454] pt-8 rounded-tl-3xl rounded-bl-3xl text-4xl w-2/5"}
+          >
+            <p>{props.index}</p>
+            <img
+              crossOrigin="anonymous"
+              class="w-52 h-52 mx-auto"
+              // src={`https://img.pokemondb.net/sprites/home/normal/1x/${props.data.pokemonSpecies.name}.png`}
+              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
+              alt="the Fresh logo: a sliced lemon dripping with juice"
+            />
+            <div className=" flex flex-row flex-wrap m-auto">
+              {props.pokemonInformation.types.map(
+                (type: any, i: number) => {
+                  return (
+                    <div className="capitalize mr-1">
+                      <Tag name={type.type.name} />
+                    </div>
+                  );
+                },
+              )}
+            </div>
+            <div className={"flex"}>
+              <p className="py-4 flex items-center space-x-2 m-auto">
+                <span
+                  className="material-symbols-outlined"
+                  style={{ "fontSize": "32px" }}
+                >
+                  weight
+                </span>
+                <span className={"text-xl"}>
+                  {props.pokemonInformation.weight / 10} kg
+                </span>
+              </p>
+              <p className="py-4 flex items-center space-x-2 m-auto">
+                <span
+                  class="material-symbols-outlined"
+                  style={{ "fontSize": "32px" }}
+                >
+                  height
+                </span>
+                <span className={"text-xl"}>
+                  {props.pokemonInformation.height / 10} m
+                </span>
+              </p>
+            </div>
+          </div>
+          {/* Right side */}
+          <div className="rounded-tr-3xl rounded-br-3xl border-t-2 border-b-2 border-r-2 border-gray-300 w-3/5 m-auto ">
+            <div
+              className={" flex flex-col p-4"}
+            >
+              <h2
+                className={"capitalize font-pokemonNameB text-2xl text-center"}
+              >
+                {props.pokemonName}
+              </h2>
+              {/* <div className={"divide-y h-0.5 bg-gray-400 w-full m-auto"} /> */}
+              <p className="py-4 m-auto text-center">
+                <p className={"text-md"}>
+                  {convertToProperSentence(
+                    props.pokemonSpecies.flavor_text_entries.find((entry) =>
+                      entry.language.name === "en"
+                    )?.flavor_text,
+                  )}
+                </p>
+              </p>
+              <div>
+                <h2 className="font-semibold text-xl mb-4 mt-2">
+                  Base Stats
+                </h2>
+                <div className="pr-10">
+                  {props.pokemonInformation.stats.map((stat: IPokemonStat) => {
+                    return (
+                      <div
+                        className={"flex flex-row items-center justify-between"}
+                      >
+                        <p className={"capitalize"}>{stat.stat.name}</p>
+                        <div className={"flex flex-row items-center space-x-2"}>
+                          <BarChart
+                            value={stat.base_stat}
+                            colour={`${lightColor}`}
+                          />
+                          <p className={"w-7 text-right"}>{stat.base_stat}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {props.pokeEvolutions?.length !== 0 && (
+                <div>
+                  <h2 className="font-semibold text-xl mb-4 mt-2">
+                    Evolution
+                  </h2>
+                  <div className={"flex space-x-4 w-full"}>
+                    {props.pokeEvolutions &&
+                      props.pokeEvolutions.map(
+                        (ev: string, index: number) => {
+                          return (
+                            <a href={`/pokemons/${ev}`}>
+                              <div
+                                className={`evolution-tile p-2 rounded-full`}
+                              >
+                                <img
+                                  class="w-20 h-20 mx-auto"
+                                  src={`https://img.pokemondb.net/sprites/home/normal/1x/${ev}.png`}
+                                  alt="the Fresh logo: a sliced lemon dripping with juice"
+                                />
+                              </div>
+                            </a>
+                          );
+                        },
+                      )}
+                  </div>
+                </div>
+              )}
+              <div
+                className={"w-full flex justify-start bottom-0 justify-end space-x-4"}
+              >
+                {pokeIndex !== 1 && (
+                  <Button
+                    id="btn"
+                    onClick={() => handleClick(-1)}
+                    className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
+                  >
+                    <span
+                      className="material-icons-outlined w-10 h-10"
+                      style={{ fontSize: "40px" }}
+                    >
+                      chevron_left
+                    </span>
+                  </Button>
+                )}
+
+                {pokeIndex !== 1100 &&
+                  (
+                    <Button
+                      onClick={() => handleClick(1)}
+                      className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
+                    >
+                      <span
+                        className="material-icons-outlined w-10 h-10"
+                        style={{ fontSize: "40px" }}
+                      >
+                        chevron_right
+                      </span>
+                    </Button>
+                  )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

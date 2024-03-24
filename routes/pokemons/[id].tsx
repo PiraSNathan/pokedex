@@ -53,13 +53,14 @@ const getEvolutionChain = async (url: string) => {
     evolutionChainPokemons.push(current[0].species.name);
     current = current[0].evolves_to;
   }
+  console.log(evolutionChainPokemons);
 };
 
 export default function Pokemons(props: PageProps) {
   return (
     <div className="min-h-screen flex flex-col">
       <PokemonContent
-        index={props.params.id}
+        index={props.data.pokemonInformation.id}
         pokemonName={props.data.pokemonSpecies.name}
         pokemonInformation={props.data.pokemonInformation}
         pokemonSpecies={props.data.pokemonSpecies}
