@@ -53,6 +53,7 @@ const getEvolutionChain = async (url: string) => {
     evolutionChainPokemons.push(current[0].species.name);
     current = current[0].evolves_to;
   }
+  console.log(evolutionChainPokemons);
 };
 
 export default function Pokemons(props: PageProps) {
