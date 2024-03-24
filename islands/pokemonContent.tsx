@@ -92,7 +92,7 @@ export default function PokemonContent(props: Props) {
           </div>
           <div
             id="pokemon-tile"
-            className={"flex font-pokemonNameB capitalize font-semibold relative flex-col items-center text-[#545454] mx-5 pt-8 rounded-tl-3xl rounded-tr-3xl text-4xl"}
+            className={"flex font-pokemonNameFont capitalize font-semibold relative flex-col items-center text-[#545454] mx-5 pt-8 rounded-tl-3xl rounded-tr-3xl text-4xl"}
           >
             {props.pokemonName}
             <img
@@ -320,7 +320,7 @@ export default function PokemonContent(props: Props) {
               className={" flex flex-col p-4"}
             >
               <h2
-                className={"capitalize font-pokemonNameB text-2xl text-center"}
+                className={"capitalize font-pokemonNameFont text-2xl text-center"}
               >
                 {props.pokemonName}
               </h2>
