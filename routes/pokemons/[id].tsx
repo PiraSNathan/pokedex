@@ -59,7 +59,7 @@ export default function Pokemons(props: PageProps) {
   return (
     <div className="min-h-screen flex flex-col">
       <PokemonContent
-        index={props.params.id}
+        index={props.data.pokemonInformation.id}
         pokemonName={props.data.pokemonSpecies.name}
         pokemonInformation={props.data.pokemonInformation}
         pokemonSpecies={props.data.pokemonSpecies}
