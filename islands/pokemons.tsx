@@ -11,11 +11,32 @@ interface Props {
 }
 
 export default function Pokemons(props: Props) {
-  const [pokemons, setPokemons] = useState<PokemonData[]>([]);
+  const [pokemons, setPokemons] = useState<PokemonData[]>(props.pokemons);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filterOption, setFilterOption] = useState<string>(
     "none",
   );
+
+  const tags = [
+    "Fire",
+    "Water",
+    "Grass",
+    "Poison",
+    "Bug",
+    "Normal",
+    "Flying",
+    "Electric",
+    "Ground",
+    "Fairy",
+    "Fighting",
+    "Psychic",
+    "Rock",
+    "Steel",
+    "Ice",
+    "Ghost",
+    "Dragon",
+    "Dark",
+  ];
 
   useEffect(() => {
     if (filterOption === "none") {
@@ -64,32 +85,15 @@ export default function Pokemons(props: Props) {
         }}
       >
         <option value="none">Filter by type</option>
-        <option>Fire</option>
-        <option>Water</option>
-        <option>Grass</option>
-        <option>Poison</option>
-        <option>Bug</option>
-        <option>Normal</option>
-        <option>Flying</option>
-        <option>Electric</option>
-        <option>Ground</option>
-        <option>Fairy</option>
-        <option>Fighting</option>
-        <option>Psychic</option>
-        <option>Rock</option>
-        <option>Steel</option>
-        <option>Ice</option>
-        <option>Ghost</option>
-        <option>Dragon</option>
-        <option>Dark</option>
+        {tags.map((tag) => <option>{tag}</option>)}
       </select>
     </div>
   );
 
   if (pokemons.length === 0) return <div>Loading...</div>;
   return (
-    <div className="p-8 space-y-4">
-      <div className="flex w-[900px] m-auto space-x-6 justify-end">
+    <div className="p-8 space-y-4 w-full max-w-[900px] m-auto">
+      <div className="flex flex-cols w-full space-x-6 justify-end">
         {/* Search input */}
         <input
           type="text"
@@ -101,7 +105,7 @@ export default function Pokemons(props: Props) {
         {/* Dropdown filter */}
         {dropdownFilter}
       </div>
-      <ul class="grid grid-cols-3 gap-2 sm:grid-cols-5 md:w-[900px] m-auto">
+      <ul class="grid grid-cols-3 gap-2 sm:grid-cols-5">
         {pokemons.filter((pokemon, index) => {
           if (searchQuery === "") return true;
           return pokemon.name.startsWith(searchQuery.toLowerCase());
@@ -115,25 +119,23 @@ export default function Pokemons(props: Props) {
                 <span class="self-end">
                   #{getFormattedIndexNumber(pokemon.url)}
                 </span>
-                <div className={"w-30 h-30 flex items-center justify-around"}>
-                  <div
-                    className="w-32 h-32 bg-cover flex justify-around items-center"
-                    style={{
-                      backgroundImage: `url('/pokeball.svg')`,
-                    }}
-                  >
-                    {
-                      <div>
-                        <img
-                          class="w-28 h-28 mx-auto"
-                          src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-                            getPokemonIndex(pokemon.url)
-                          }.png`}
-                          alt={pokemon.name}
-                        />
-                      </div>
-                    }
-                  </div>
+                <div
+                  className="w-full h-auto bg-cover flex justify-around items-center"
+                  style={{
+                    backgroundImage: `url('/pokeball.svg')`,
+                  }}
+                >
+                  {
+                    <div>
+                      <img
+                        class="w-28 h-auto mx-auto"
+                        src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+                          getPokemonIndex(pokemon.url)
+                        }.png`}
+                        alt={pokemon.name}
+                      />
+                    </div>
+                  }
                 </div>
                 <span class="self-center capitalize">
                   {pokemon.name}
