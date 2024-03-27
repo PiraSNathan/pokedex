@@ -24,7 +24,7 @@ export const handler: Handlers<DataPokemon> = {
 export default function MyPage(props: PageProps) {
   return (
     <div className="flex flex-col text-center">
-      <h1 className="text-2xl mt-8 font-semibold text-blue-500">Pokemons</h1>
+      <h1 className="text-2xl mt-8 font-semibold text-blue-500">Pokémons</h1>
       <Pokemons pokemons={props.data.results} />
     </div>
   );
