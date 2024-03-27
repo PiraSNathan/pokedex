@@ -13,7 +13,7 @@ interface DataPokemon {
 export const handler: Handlers<DataPokemon> = {
   async GET(req, ctx) {
     const res = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/?limit=600`,
+      `https://pokeapi.co/api/v2/pokemon/?limit=1000`,
     );
     const resBody = await res.json();
     const results: PokemonData[] = resBody.results;
@@ -23,8 +23,9 @@ export const handler: Handlers<DataPokemon> = {
 
 export default function MyPage(props: PageProps) {
   return (
-    <>
+    <div className="flex flex-col text-center">
+      <h1 className="text-2xl mt-8 font-semibold text-blue-500">Pokemons</h1>
       <Pokemons pokemons={props.data.results} />
-    </>
+    </div>
   );
 }

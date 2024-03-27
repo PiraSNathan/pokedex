@@ -60,15 +60,15 @@ const getEvolutionChain = async (url: string) => {
 
 export default function Pokemons(props: PageProps) {
   return (
-    <div className="min-h-screen flex flex-col">
-      <PokemonContent
-        index={props.data.pokemonInformation.id}
-        pokemonName={props.data.pokemonSpecies.name}
-        pokemonInformation={props.data.pokemonInformation}
-        pokemonSpecies={props.data.pokemonSpecies}
-        pokeEvolutions={props.data.pokeEvolutions}
-      >
-      </PokemonContent>
-    </div>
+    // <div className="min-h-screen h-full items-stretch">
+    <PokemonContent
+      index={props.data.pokemonInformation.id}
+      pokemonName={props.data.pokemonSpecies.name}
+      pokemonInformation={props.data.pokemonInformation}
+      pokemonSpecies={props.data.pokemonSpecies}
+      pokeEvolutions={props.data.pokeEvolutions}
+    >
+    </PokemonContent>
+    // </div>
   );
 }

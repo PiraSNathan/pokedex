@@ -1,3 +1,4 @@
+import { IType, ITypePokemon } from "npm:pokeapi-typescript";
 import { useEffect, useState } from "preact/hooks";
 import { getPokemonIndex } from "../util/index.tsx";
 
@@ -44,18 +45,21 @@ export default function Pokemons(props: Props) {
       setPokemons(props.pokemons);
       return;
     }
+
     (async () => {
       const res = await fetch(
         `https://pokeapi.co/api/v2/type/${filterOption.toLowerCase()}`,
       );
-      const resBody = await res.json();
-      //   Reduce the data to an array of PokemonData
-      const filteredPokemons = resBody.pokemon.map((pokemon: any) => {
-        return {
-          name: pokemon.pokemon.name,
-          url: pokemon.pokemon.url,
-        };
-      });
+      const resBody: IType = await res.json();
+      // Extract the data and put into an array of type PokemonData.
+      const filteredPokemons: PokemonData[] = resBody.pokemon.map(
+        (pokemon: ITypePokemon) => {
+          return {
+            name: pokemon.pokemon.name,
+            url: pokemon.pokemon.url,
+          };
+        },
+      );
       setPokemons(filteredPokemons);
     })();
   }, [filterOption]);

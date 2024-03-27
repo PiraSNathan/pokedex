@@ -6,6 +6,7 @@ import {
   IPokemon,
   IPokemonSpecies,
   IPokemonStat,
+  IPokemonType,
 } from "npm:pokeapi-typescript";
 import BarChart from "../components/BarChart.tsx";
 import Tag from "../components/Tag.tsx";
@@ -79,10 +80,96 @@ export default function PokemonContent(props: Props) {
     return properSentence;
   };
 
+  const evoChain = (
+    <div>
+      <h2 className="font-semibold text-3xl md:text-xl mb-4 mt-2">
+        Evolution
+      </h2>
+      <div
+        className={"flex justify-between md:justify-normal md:w-full md:space-x-4"}
+      >
+        {props.pokeEvolutions &&
+          props.pokeEvolutions.map(
+            (evolvesToPokemonIndex: string) => {
+              return (
+                <a href={`/pokemons/${evolvesToPokemonIndex}`}>
+                  <div
+                    className={`evolution-tile p-2 rounded-full`}
+                  >
+                    <img
+                      class="w-24 h-24 mx-auto"
+                      src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolvesToPokemonIndex}.png`}
+                      alt="pokemon picture"
+                    />
+                  </div>
+                </a>
+              );
+            },
+          )}
+      </div>
+    </div>
+  );
+
+  const navigationButtons = (
+    <div
+      className={"w-full flex justify-end pb-4 space-x-4"}
+    >
+      {pokeIndex !== 1 && (
+        <Button
+          id="btn"
+          onClick={() => handleClick(-1)}
+          className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
+        >
+          <span
+            className="material-icons-outlined w-10 h-10"
+            style={{ fontSize: "40px" }}
+          >
+            chevron_left
+          </span>
+        </Button>
+      )}
+
+      {pokeIndex !== 1100 &&
+        (
+          <Button
+            onClick={() => handleClick(1)}
+            className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
+          >
+            <span
+              className="material-icons-outlined w-10 h-10"
+              style={{ fontSize: "40px" }}
+            >
+              chevron_right
+            </span>
+          </Button>
+        )}
+    </div>
+  );
+
+  const baseStat = (name: string, value: number) => {
+    return (
+      <div
+        className={"flex flex-row items-center justify-between p-3 md:p-0"}
+      >
+        <p className={"capitalize"}>{name}</p>
+        <div className={"flex flex-row items-center space-x-2"}>
+          <BarChart
+            value={value}
+            colour={`${lightColor}`}
+          />
+          <p className={"w-7 text-right"}>{value}</p>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <>
-      {/* Mobile View */}
-      <div className={"md:hidden"}>
+    <div>
+      {/* Mobile view */}
+      <div
+        className={"h-full min-h-screen items-stretch flex flex-col md:hidden"}
+      >
+        {/* Top part */}
         <div>
           {/* pokemon index */}
           <div
@@ -99,7 +186,7 @@ export default function PokemonContent(props: Props) {
               crossOrigin="anonymous"
               class="w-52 h-52 mx-auto mb-16"
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
-              alt="the Fresh logo: a sliced lemon dripping with juice"
+              alt={props.pokemonName}
             />
             <div
               className={`flex absolute bottom-0 flex-row justify-center text-2xl font-sans space-x-1 text-black`}
@@ -118,7 +205,7 @@ export default function PokemonContent(props: Props) {
                   indexNumber === 1 && "z-10 !bg-white"
                 } bg-gray-200 p-2 rounded-tl-lg rounded-tr-lg `}
               >
-                Moves & Abilities
+                Base Stats
               </button>
             </div>
           </div>
@@ -177,250 +264,108 @@ export default function PokemonContent(props: Props) {
                   </div>
                 </div>
                 {/* Evolution Chain */}
-                {props.pokeEvolutions?.length !== 0 && (
-                  <div>
-                    <h2 className="font-semibold text-3xl mb-4 mt-2">
-                      Evolution
-                    </h2>
-                    <div className={"flex justify-between"}>
-                      {props.pokeEvolutions &&
-                        props.pokeEvolutions.map(
-                          (evolvesToPokemonIndex: string) => {
-                            return (
-                              <a href={`/pokemons/${evolvesToPokemonIndex}`}>
-                                <div
-                                  className={`evolution-tile p-2 rounded-full`}
-                                >
-                                  <img
-                                    class="w-24 h-24 mx-auto"
-                                    src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolvesToPokemonIndex}.png`}
-                                    alt="the Fresh logo: a sliced lemon dripping with juice"
-                                  />
-                                </div>
-                              </a>
-                            );
-                          },
-                        )}
-                    </div>
-                  </div>
-                )}
+                {props.pokeEvolutions?.length !== 0 && evoChain}
               </div>
             )}
             {indexNumber === 1 && (
               <>
                 {props.pokemonInformation.stats.map((stat: IPokemonStat) => {
-                  return (
-                    <div
-                      className={"flex flex-row items-center justify-between p-3"}
-                    >
-                      <p className={"capitalize"}>{stat.stat.name}</p>
-                      <div className={"flex flex-row items-center space-x-2"}>
-                        <BarChart
-                          value={stat.base_stat}
-                          colour={`${lightColor}`}
-                        />
-                        <p className={"w-7 text-right"}>{stat.base_stat}</p>
-                      </div>
-                    </div>
-                  );
+                  return baseStat(stat.stat.name, stat.base_stat);
                 })}
               </>
             )}
           </div>
-          {/* Navigationbuttons */}
-          <div
-            className={"w-full flex justify-start absolute bottom-0 py-4 space-x-4"}
-          >
-            {pokeIndex !== 1 && (
-              <Button
-                id="btn"
-                onClick={() => handleClick(-1)}
-                className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
-              >
-                <span
-                  className="material-icons-outlined w-12 h-12"
-                  style={{ fontSize: "48px" }}
-                >
-                  chevron_left
-                </span>
-              </Button>
-            )}
-
-            {pokeIndex !== 1100 &&
-              (
-                <Button
-                  onClick={() => handleClick(1)}
-                  className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
-                >
-                  <span
-                    className="material-icons-outlined w-12 h-12"
-                    style={{ fontSize: "48px" }}
-                  >
-                    chevron_right
-                  </span>
-                </Button>
-              )}
-          </div>
         </div>
+        {/* Navigationbuttons */}
+        {navigationButtons}
       </div>
-      {/* Desktop View */}
-      <div className="hidden md:block w-[900px] m-auto">
-        <div className={"flex flex-row"}>
-          {/* Left side */}
-          <div
-            id="pokemon-tile-big"
-            className={"flex capitalize font-semibold flex-col items-center text-[#545454] pt-8 rounded-tl-3xl rounded-bl-3xl text-4xl w-2/5"}
-          >
-            <p>{props.index}</p>
-            <img
-              crossOrigin="anonymous"
-              class="w-52 h-52 mx-auto"
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
-              alt="the Fresh logo: a sliced lemon dripping with juice"
-            />
-            <div className=" flex flex-row flex-wrap m-auto">
-              {props.pokemonInformation.types.map(
-                (type: any, i: number) => {
-                  return (
-                    <div className="capitalize mr-1">
-                      <Tag name={type.type.name} />
-                    </div>
-                  );
-                },
-              )}
-            </div>
-            <div className={"flex"}>
-              <p className="py-4 flex items-center space-x-2 m-auto">
-                <span
-                  className="material-symbols-outlined"
-                  style={{ "fontSize": "32px" }}
-                >
-                  weight
-                </span>
-                <span className={"text-xl"}>
-                  {props.pokemonInformation.weight / 10} kg
-                </span>
-              </p>
-              <p className="py-4 flex items-center space-x-2 m-auto">
-                <span
-                  class="material-symbols-outlined"
-                  style={{ "fontSize": "32px" }}
-                >
-                  height
-                </span>
-                <span className={"text-xl"}>
-                  {props.pokemonInformation.height / 10} m
-                </span>
-              </p>
-            </div>
-          </div>
-          {/* Right side */}
-          <div className="rounded-tr-3xl rounded-br-3xl border-t-2 border-b-2 border-r-2 border-gray-300 w-3/5 m-auto ">
-            <div
-              className={" flex flex-col p-4"}
-            >
-              <h2
-                className={"capitalize font-pokemonNameFont text-2xl text-center"}
-              >
-                {props.pokemonName}
-              </h2>
-              <p className="py-4 m-auto text-center">
-                <p className={"text-md"}>
-                  {convertToProperSentence(
-                    props.pokemonSpecies.flavor_text_entries.find((entry) =>
-                      entry.language.name === "en"
-                    )?.flavor_text,
-                  )}
-                </p>
-              </p>
-              <div>
-                <h2 className="font-semibold text-xl mb-4 mt-2">
-                  Base Stats
-                </h2>
-                <div className="pr-10">
-                  {props.pokemonInformation.stats.map((stat: IPokemonStat) => {
-                    return (
-                      <div
-                        className={"flex flex-row items-center justify-between"}
-                      >
-                        <p className={"capitalize"}>{stat.stat.name}</p>
-                        <div className={"flex flex-row items-center space-x-2"}>
-                          <BarChart
-                            value={stat.base_stat}
-                            colour={`${lightColor}`}
-                          />
-                          <p className={"w-7 text-right"}>{stat.base_stat}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {props.pokeEvolutions?.length !== 0 && (
-                <div>
-                  <h2 className="font-semibold text-xl mb-4 mt-2">
-                    Evolution
-                  </h2>
-                  <div className={"flex space-x-4 w-full"}>
-                    {props.pokeEvolutions &&
-                      props.pokeEvolutions.map(
-                        (evolvesToPokemonIndex: string) => {
-                          return (
-                            <a href={`/pokemons/${evolvesToPokemonIndex}`}>
-                              <div
-                                className={`evolution-tile p-2 rounded-full`}
-                              >
-                                <img
-                                  class="w-20 h-20 mx-auto"
-                                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolvesToPokemonIndex}.png`}
-                                  alt="the Fresh logo: a sliced lemon dripping with juice"
-                                />
-                              </div>
-                            </a>
-                          );
-                        },
-                      )}
+      {/* Desktop view */}
+      <div
+        className={"hidden md:flex flex-row w-3/4 justify-center content-center h-2/5 my-auto"}
+      >
+        {/* Left side */}
+        <div
+          id="pokemon-tile-big"
+          className={"flex capitalize font-semibold flex-col items-center text-[#545454] pt-8 rounded-tl-3xl rounded-bl-3xl text-4xl w-2/5"}
+        >
+          <p>{props.index}</p>
+          <img
+            crossOrigin="anonymous"
+            class="w-64 h-64 mx-auto"
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
+            alt={props.pokemonName}
+          />
+          <div className="flex flex-row flex-wrap">
+            {props.pokemonInformation.types.map(
+              (type: any, i: number) => {
+                return (
+                  <div className="capitalize mr-1">
+                    <Tag name={type.type.name} />
                   </div>
-                </div>
-              )}
-              <div
-                className={"w-full flex justify-start bottom-0 justify-end space-x-4"}
+                );
+              },
+            )}
+          </div>
+          <div className={"flex"}>
+            <p className="py-4 flex items-center space-x-2 m-auto">
+              <span
+                className="material-symbols-outlined"
+                style={{ "fontSize": "32px" }}
               >
-                {pokeIndex !== 1 && (
-                  <Button
-                    id="btn"
-                    onClick={() => handleClick(-1)}
-                    className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
-                  >
-                    <span
-                      className="material-icons-outlined w-10 h-10"
-                      style={{ fontSize: "40px" }}
-                    >
-                      chevron_left
-                    </span>
-                  </Button>
+                weight
+              </span>
+              <span className={"text-xl"}>
+                {props.pokemonInformation.weight / 10} kg
+              </span>
+            </p>
+            <p className="py-4 flex items-center space-x-2 m-auto">
+              <span
+                class="material-symbols-outlined"
+                style={{ "fontSize": "32px" }}
+              >
+                height
+              </span>
+              <span className={"text-xl"}>
+                {props.pokemonInformation.height / 10} m
+              </span>
+            </p>
+          </div>
+        </div>
+        {/* Right side */}
+        <div className="rounded-tr-3xl rounded-br-3xl border-t-2 border-b-2 border-r-2 border-gray-300 w-3/5 m-auto ">
+          <div
+            className={" flex flex-col p-4"}
+          >
+            <h2
+              className={"capitalize font-pokemonNameFont text-2xl text-center"}
+            >
+              {props.pokemonName}
+            </h2>
+            <p className="py-4 m-auto text-center">
+              <p className={"text-md"}>
+                {convertToProperSentence(
+                  props.pokemonSpecies.flavor_text_entries.find((entry) =>
+                    entry.language.name === "en"
+                  )?.flavor_text,
                 )}
-
-                {pokeIndex !== 1100 &&
-                  (
-                    <Button
-                      onClick={() => handleClick(1)}
-                      className={"bg-gray-100 rounded-full flex items-center justify-center w-12 h-12 shadow-xl border-[0.5px] border-black"}
-                    >
-                      <span
-                        className="material-icons-outlined w-10 h-10"
-                        style={{ fontSize: "40px" }}
-                      >
-                        chevron_right
-                      </span>
-                    </Button>
-                  )}
+              </p>
+            </p>
+            <div>
+              <h2 className="font-semibold text-xl mb-4 mt-2">
+                Base Stats
+              </h2>
+              <div className="pr-10">
+                {props.pokemonInformation.stats.map((stat: IPokemonStat) => {
+                  return baseStat(stat.stat.name, stat.base_stat);
+                })}
               </div>
             </div>
+
+            {props.pokeEvolutions?.length !== 0 && evoChain}
+            {navigationButtons}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
