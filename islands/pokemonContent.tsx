@@ -10,11 +10,10 @@ import {
 } from "npm:pokeapi-typescript";
 import BarChart from "../components/BarChart.tsx";
 import Tag from "../components/Tag.tsx";
-import { IType } from "npm:pokeapi-typescript";
-import { INamedApiResource } from "npm:pokeapi-typescript";
+import { getFormattedIndexNumber } from "../util/index.tsx";
 
 interface Props {
-  index: number | string;
+  index: string;
   pokemonName: string;
   className?: string;
   pokemonSpecies: IPokemonSpecies;
@@ -114,7 +113,7 @@ export default function PokemonContent(props: Props) {
 
   const navigationButtons = (
     <div
-      className={"w-full flex justify-end pb-4 space-x-4"}
+      className={"w-full flex justify-end pb-4 space-x-4 px-5"}
     >
       {pokeIndex !== 1 && (
         <Button
@@ -168,7 +167,7 @@ export default function PokemonContent(props: Props) {
   const pokemonImage = (
     <img
       crossOrigin="anonymous"
-      className="w-52 h-52 md:w-64 md:h-64 mx-auto mb-16"
+      className="w-52 h-52 md:w-80 md:h-80 mx-auto mb-16 md:mx-0 md:mb-0"
       src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
       alt={props.pokemonName}
     />
@@ -186,7 +185,7 @@ export default function PokemonContent(props: Props) {
           <div
             className={"flex flex-col mt-3 mb-4 font-semibold text-2xl items-center"}
           >
-            {props.index}
+            {getFormattedIndexNumber(props.index.toString(), false)}
           </div>
           <div
             id="pokemon-tile"
@@ -306,7 +305,7 @@ export default function PokemonContent(props: Props) {
             </span>
             Go back to overview
           </a>
-          <p>{props.index}</p>
+          <p>{getFormattedIndexNumber(props.index.toString(), false)}</p>
           {pokemonImage}
           <div className="flex flex-row flex-wrap">
             {props.pokemonInformation.types.map(
@@ -319,8 +318,8 @@ export default function PokemonContent(props: Props) {
               },
             )}
           </div>
-          <div className={"flex"}>
-            <p className="py-4 flex items-center space-x-2 m-auto">
+          <div className={"flex space-x-2"}>
+            <p className="py-4 flex items-center space-x-1 m-auto">
               <span
                 className="material-symbols-outlined"
                 style={{ "fontSize": "32px" }}
@@ -331,7 +330,7 @@ export default function PokemonContent(props: Props) {
                 {props.pokemonInformation.weight / 10} kg
               </span>
             </p>
-            <p className="py-4 flex items-center space-x-2 m-auto">
+            <p className="py-4 flex items-center space-x-0 m-auto">
               <span
                 class="material-symbols-outlined"
                 style={{ "fontSize": "32px" }}

@@ -1,6 +1,6 @@
 import { IType, ITypePokemon } from "npm:pokeapi-typescript";
 import { useEffect, useState } from "preact/hooks";
-import { getPokemonIndex } from "../util/index.tsx";
+import { getFormattedIndexNumber, getPokemonIndex } from "../util/index.tsx";
 
 interface PokemonData {
   name: string;
@@ -64,11 +64,6 @@ export default function Pokemons(props: Props) {
     })();
   }, [filterOption]);
 
-  const getFormattedIndexNumber = (url: string) => {
-    const pokemonIndex = getPokemonIndex(url);
-    return pokemonIndex.padStart(3, "0");
-  };
-
   const dropdownFilter = (
     <div class="relative inline-flex">
       <svg
@@ -121,7 +116,7 @@ export default function Pokemons(props: Props) {
                 class="flex flex-col px-2"
               >
                 <span class="self-end">
-                  #{getFormattedIndexNumber(pokemon.url)}
+                  #{getFormattedIndexNumber(pokemon.url, true)}
                 </span>
                 <div
                   className="w-full h-auto bg-cover flex justify-around items-center"
