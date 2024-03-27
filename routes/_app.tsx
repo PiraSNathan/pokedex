@@ -36,7 +36,7 @@ export default function App({ Component }: AppProps) {
           @import
           url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600&display=swap');
         </style>
-        <title>pokedex</title>
+        <title>Pokedex</title>
       </head>
       <body>
         <Component />
