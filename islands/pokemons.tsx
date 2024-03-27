@@ -82,7 +82,7 @@ export default function Pokemons(props: Props) {
         />
       </svg>
       <select
-        class="border border-gray-300 rounded text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none" // ...
+        class="border border-gray-300 rounded text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
         onClick={(e: any) => {
           const value = e.target?.value;
           setFilterOption(value);

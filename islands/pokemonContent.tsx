@@ -10,6 +10,8 @@ import {
 } from "npm:pokeapi-typescript";
 import BarChart from "../components/BarChart.tsx";
 import Tag from "../components/Tag.tsx";
+import { IType } from "npm:pokeapi-typescript";
+import { INamedApiResource } from "npm:pokeapi-typescript";
 
 interface Props {
   index: number | string;
@@ -163,8 +165,17 @@ export default function PokemonContent(props: Props) {
     );
   };
 
+  const pokemonImage = (
+    <img
+      crossOrigin="anonymous"
+      className="w-52 h-52 md:w-64 md:h-64 mx-auto mb-16"
+      src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
+      alt={props.pokemonName}
+    />
+  );
+
   return (
-    <div>
+    <div className="flex min-h-screen justify-center items-center content-center flex-col">
       {/* Mobile view */}
       <div
         className={"h-full min-h-screen items-stretch flex flex-col md:hidden"}
@@ -182,12 +193,7 @@ export default function PokemonContent(props: Props) {
             className={"flex font-pokemonNameFont capitalize font-semibold relative flex-col items-center text-[#545454] mx-5 pt-8 rounded-tl-3xl rounded-tr-3xl text-4xl"}
           >
             {props.pokemonName}
-            <img
-              crossOrigin="anonymous"
-              class="w-52 h-52 mx-auto mb-16"
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
-              alt={props.pokemonName}
-            />
+            {pokemonImage}
             <div
               className={`flex absolute bottom-0 flex-row justify-center text-2xl font-sans space-x-1 text-black`}
             >
@@ -218,7 +224,7 @@ export default function PokemonContent(props: Props) {
                 <div className={"flex flex-col space-y-4"}>
                   <div className="py-4 flex flex-row flex-wrap m-auto">
                     {props.pokemonInformation.types.map(
-                      (type: any, i: number) => {
+                      (type: IPokemonType) => {
                         return (
                           <div className="capitalize mr-1">
                             <Tag name={type.type.name} />
@@ -281,23 +287,30 @@ export default function PokemonContent(props: Props) {
       </div>
       {/* Desktop view */}
       <div
-        className={"hidden md:flex flex-row w-3/4 justify-center content-center h-2/5 my-auto"}
+        className={"hidden md:flex flex-row mt-10"}
       >
         {/* Left side */}
         <div
           id="pokemon-tile-big"
-          className={"flex capitalize font-semibold flex-col items-center text-[#545454] pt-8 rounded-tl-3xl rounded-bl-3xl text-4xl w-2/5"}
+          className={"flex relative capitalize font-semibold flex-col items-center text-[#545454] pt-8 rounded-tl-3xl rounded-bl-3xl text-4xl w-2/5 flex-1"}
         >
+          <a
+            href={"/pokemons"}
+            className="absolute start-0 -top-8 text-sm flex items-center"
+          >
+            <span
+              className="material-icons-outlined"
+              style={{ fontSize: "18px" }}
+            >
+              chevron_left
+            </span>
+            Go back to overview
+          </a>
           <p>{props.index}</p>
-          <img
-            crossOrigin="anonymous"
-            class="w-64 h-64 mx-auto"
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${props.index}.png`}
-            alt={props.pokemonName}
-          />
+          {pokemonImage}
           <div className="flex flex-row flex-wrap">
             {props.pokemonInformation.types.map(
-              (type: any, i: number) => {
+              (type: IPokemonType) => {
                 return (
                   <div className="capitalize mr-1">
                     <Tag name={type.type.name} />
@@ -332,16 +345,16 @@ export default function PokemonContent(props: Props) {
           </div>
         </div>
         {/* Right side */}
-        <div className="rounded-tr-3xl rounded-br-3xl border-t-2 border-b-2 border-r-2 border-gray-300 w-3/5 m-auto ">
+        <div className="rounded-tr-3xl rounded-br-3xl border-t-2 border-b-2 border-r-2 border-gray-300 w-3/5 flex-1">
           <div
-            className={" flex flex-col p-4"}
+            className={" flex flex-col py-4 pr-4 pl-12"}
           >
             <h2
               className={"capitalize font-pokemonNameFont text-2xl text-center"}
             >
               {props.pokemonName}
             </h2>
-            <p className="py-4 m-auto text-center">
+            <p className="py-4 m-auto text-center max-w-xl">
               <p className={"text-md"}>
                 {convertToProperSentence(
                   props.pokemonSpecies.flavor_text_entries.find((entry) =>
