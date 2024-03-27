@@ -295,7 +295,7 @@ export default function PokemonContent(props: Props) {
         >
           <a
             href={"/pokemons"}
-            className="absolute start-0 -top-8 text-sm flex items-center"
+            className="absolute start-0 -top-8 text-sm flex items-center text-[#061d43]"
           >
             <span
               className="material-icons-outlined"

@@ -110,12 +110,12 @@ export default function Pokemons(props: Props) {
           return pokemon.name.startsWith(searchQuery.toLowerCase());
         }).map((pokemon, index) => {
           return (
-            <li className="bg-gray-200 flex items-center justify-around p-1 rounded-sm">
+            <li className="bg-[#E5EDFF] flex items-center justify-around p-1 rounded-md text-[#061d43]">
               <a
                 href={`/pokemons/${getPokemonIndex(pokemon.url)}`}
                 class="flex flex-col px-2"
               >
-                <span class="self-end">
+                <span>
                   #{getFormattedIndexNumber(pokemon.url, true)}
                 </span>
                 <div
