@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <div className="flex min-h-screen justify-center items-center content-center">
-      <div className="px-4 py-8 mx-auto bg-[#3D6FBA] w-3/4 md:w-1/5 rounded-xl p-2 space-y-2">
+      <div className="px-4 py-8 mx-auto bg-[#3D6FBA] w-3/4 lg:w-2/5 rounded-xl p-2 space-y-2">
         <h1 className="text-4xl font-bold text-white">Welcome!</h1>
         <p className="text-lg text-white">
           In this Pokédex you will find detailed information on the first 1000
