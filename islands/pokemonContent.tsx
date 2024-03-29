@@ -115,7 +115,7 @@ export default function PokemonContent(props: Props) {
     <div
       className={"w-full flex justify-end pb-4 pt-4 space-x-4 px-5"}
     >
-      {pokeIndex !== 1 && (
+      {pokeIndex > 1 && (
         <Button
           id="btn"
           onClick={() => handleClick(-1)}
@@ -130,7 +130,7 @@ export default function PokemonContent(props: Props) {
         </Button>
       )}
 
-      {pokeIndex !== 1000 &&
+      {pokeIndex < 1000 &&
         (
           <Button
             onClick={() => handleClick(1)}

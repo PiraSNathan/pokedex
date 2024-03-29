@@ -60,7 +60,11 @@ export default function Pokemons(props: Props) {
           };
         },
       );
-      setPokemons(filteredPokemons);
+      // Only show the pokemons which are in the first 1000.
+      const filteredPokemonsByIndex = filteredPokemons.filter((pokemon) =>
+        Number(getPokemonIndex(pokemon.url)) <= 1000
+      );
+      setPokemons(filteredPokemonsByIndex);
     })();
   }, [filterOption]);
 

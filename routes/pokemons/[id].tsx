@@ -14,8 +14,20 @@ interface PokemonDetails {
   pokemonInformation: IPokemon;
 }
 
-export const handler: Handlers<PokemonDetails> = {
+interface ErrorMessage {
+  message: string;
+}
+
+export const handler: Handlers<PokemonDetails | ErrorMessage> = {
   async GET(req, ctx) {
+    if (!Number(ctx.params.id)) {
+      return ctx.render({ message: "Pokemon not found." });
+    }
+    if (Number(ctx.params.id) <= 0 || Number(ctx.params.id) > 1000) {
+      return ctx.render({
+        message: "In this Pokédex only the first 1000 Pokémons will be shown.",
+      });
+    }
     const res = await fetch(
       `https://pokeapi.co/api/v2/pokemon-species/${ctx.params.id}`,
     );
@@ -59,8 +71,15 @@ const getEvolutionChain = async (url: string) => {
 };
 
 export default function Pokemons(props: PageProps) {
+  if ("message" in props.data) {
+    return (
+      <div className="flex justify-center items-center content-center p-4">
+        {props.data.message}
+      </div>
+    );
+  }
+  if (props.data.id <= 0 || props.data.id > 1000) return <div>I dont show</div>;
   return (
-    // <div className="min-h-screen h-full items-stretch">
     <PokemonContent
       index={props.data.pokemonInformation.id}
       pokemonName={props.data.pokemonSpecies.name}
@@ -69,6 +88,5 @@ export default function Pokemons(props: PageProps) {
       pokeEvolutions={props.data.pokeEvolutions}
     >
     </PokemonContent>
-    // </div>
   );
 }
