@@ -87,7 +87,7 @@ export default function PokemonContent(props: Props) {
         Evolution
       </h2>
       <div
-        className={"flex justify-between md:justify-normal md:w-full md:space-x-4"}
+        className={"flex justify-between space-x-1 md:justify-normal md:w-full md:space-x-4"}
       >
         {props.pokeEvolutions &&
           props.pokeEvolutions.map(
@@ -113,7 +113,7 @@ export default function PokemonContent(props: Props) {
 
   const navigationButtons = (
     <div
-      className={"w-full flex justify-end pb-4 space-x-4 px-5"}
+      className={"w-full flex justify-end pb-4 pt-4 space-x-4 px-5"}
     >
       {pokeIndex !== 1 && (
         <Button
