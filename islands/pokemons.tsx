@@ -65,9 +65,9 @@ export default function Pokemons(props: Props) {
   }, [filterOption]);
 
   const dropdownFilter = (
-    <div class="relative inline-flex">
+    <div className="relative inline-flex">
       <svg
-        class="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
+        className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 412 232"
       >
@@ -77,7 +77,7 @@ export default function Pokemons(props: Props) {
         />
       </svg>
       <select
-        class="border border-gray-300 rounded text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
+        className="border border-gray-300 rounded text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none"
         onClick={(e: any) => {
           const value = e.target?.value;
           setFilterOption(value);
@@ -104,7 +104,7 @@ export default function Pokemons(props: Props) {
         {/* Dropdown filter */}
         {dropdownFilter}
       </div>
-      <ul class="grid grid-cols-3 gap-2 sm:grid-cols-5">
+      <ul className="grid grid-cols-3 gap-2 sm:grid-cols-5">
         {pokemons.filter((pokemon, index) => {
           if (searchQuery === "") return true;
           return pokemon.name.startsWith(searchQuery.toLowerCase());
@@ -113,7 +113,7 @@ export default function Pokemons(props: Props) {
             <li className="bg-[#E5EDFF] flex items-center justify-around p-1 rounded-md text-[#061d43]">
               <a
                 href={`/pokemons/${getPokemonIndex(pokemon.url)}`}
-                class="flex flex-col px-2"
+                className="flex flex-col px-2"
               >
                 <span>
                   #{getFormattedIndexNumber(pokemon.url, true)}
@@ -127,7 +127,7 @@ export default function Pokemons(props: Props) {
                   {
                     <div>
                       <img
-                        class="w-28 h-auto mx-auto"
+                        className="w-28 h-auto mx-auto"
                         src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
                           getPokemonIndex(pokemon.url)
                         }.png`}
@@ -136,7 +136,7 @@ export default function Pokemons(props: Props) {
                     </div>
                   }
                 </div>
-                <span class="self-center capitalize">
+                <span className="self-center capitalize">
                   {pokemon.name}
                 </span>
               </a>

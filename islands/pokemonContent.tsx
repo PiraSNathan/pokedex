@@ -98,7 +98,7 @@ export default function PokemonContent(props: Props) {
                     className={`evolution-tile p-2 rounded-full`}
                   >
                     <img
-                      class="w-24 h-24 mx-auto"
+                      className="w-24 h-24 mx-auto"
                       src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evolvesToPokemonIndex}.png`}
                       alt="pokemon picture"
                     />
@@ -194,7 +194,7 @@ export default function PokemonContent(props: Props) {
             {props.pokemonName}
             {pokemonImage}
             <div
-              className={`flex absolute bottom-0 flex-row justify-center text-2xl font-sans space-x-1 text-black`}
+              className={`flex absolute bottom-0 flex-row justify-center text-2xl font-sans space-x-1 text-[#061d43]`}
             >
               <button
                 onClick={() => handleClickOnTab(0)}
@@ -257,7 +257,7 @@ export default function PokemonContent(props: Props) {
                     </p>
                     <p className="py-4 flex items-center space-x-2 m-auto">
                       <span
-                        class="material-symbols-outlined"
+                        className="material-symbols-outlined"
                         style={{ "fontSize": "52px" }}
                       >
                         height
@@ -332,7 +332,7 @@ export default function PokemonContent(props: Props) {
             </p>
             <p className="py-4 flex items-center space-x-0 m-auto">
               <span
-                class="material-symbols-outlined"
+                className="material-symbols-outlined"
                 style={{ "fontSize": "32px" }}
               >
                 height
