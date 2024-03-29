@@ -130,7 +130,7 @@ export default function PokemonContent(props: Props) {
         </Button>
       )}
 
-      {pokeIndex !== 1100 &&
+      {pokeIndex !== 1000 &&
         (
           <Button
             onClick={() => handleClick(1)}
